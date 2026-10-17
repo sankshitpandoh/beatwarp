@@ -5,121 +5,198 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Beatwarp — Music Warps Your Image</title>
   <meta name="description" content="Upload any image and watch it warp, melt, tunnel and shatter to music. Runs entirely in your browser.">
+  <meta name="theme-color" content="#050708">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow+Semi+Condensed:wght@500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Martian+Mono:wght@400;500&family=Syne:wght@700;800&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main id="app">
-    <section id="stage">
-      <canvas id="view" aria-label="Visualizer output"></canvas>
-      <div id="meters" aria-hidden="true">
-        <span data-band="sub"><i></i>sub</span>
-        <span data-band="bass"><i></i>bass</span>
-        <span data-band="mid"><i></i>mid</span>
-        <span data-band="high"><i></i>high</span>
-        <span data-band="kick"><i></i>kick</span>
-      </div>
-      <div id="modeName"></div>
-      <div id="recBadge" hidden>Recording <span id="recTime">0:00</span></div>
+    <section id="stage" aria-label="Visualizer">
+      <canvas id="view" role="img" aria-label="Visualizer output"></canvas>
 
-      <div id="intro">
-        <div class="intro-card">
-          <h1>Beatwarp</h1>
-          <p>Load any picture and play some music. The picture tunnels, melts, shatters and breathes in time with it.</p>
-          <div class="intro-actions">
-            <button class="primary" data-action="upload-image">Upload an image</button>
-            <button data-action="start-demo">Try with demo beat</button>
+      <!-- heads-up layer over the picture -->
+      <div class="hud hud-top">
+        <div class="brand">
+          <span class="nucleus" aria-hidden="true"></span>
+          <h1 class="wordmark">Beatwarp</h1>
+          <div id="meters" aria-hidden="true">
+            <span data-band="sub"><i></i>sub</span>
+            <span data-band="bass"><i></i>bass</span>
+            <span data-band="mid"><i></i>mid</span>
+            <span data-band="high"><i></i>high</span>
+            <span data-band="kick"><i></i>beat</span>
           </div>
-          <p class="fine">It all runs in your browser. Nothing is uploaded.</p>
+        </div>
+        <div class="hud-tools">
+          <button class="icon" data-action="help" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+          <button class="icon" data-action="snapshot" title="Save a PNG of this frame" aria-label="Save PNG">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+          </button>
+          <button class="icon" data-action="fullscreen" title="Fullscreen (F)" aria-label="Fullscreen">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          </button>
+          <button class="icon" id="panelToggle" title="Controls (H)" aria-label="Controls" aria-controls="panel" aria-expanded="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+          </button>
         </div>
       </div>
-      <div id="drop" hidden><div>Drop image, video or audio</div></div>
+
+      <div id="modeName" aria-hidden="true"><small></small><span></span></div>
+      <div id="recBadge" hidden><span class="dot"></span>REC <span id="recTime">0:00</span></div>
+
+      <div class="hud dock" id="dock">
+        <div class="dock-info"><span id="modeIndex">02/20</span> <span id="modeHint"></span></div>
+        <div class="dock-row">
+          <button id="playBtn" class="transport" data-action="play" aria-label="Play"><span class="ico play"></span></button>
+          <div class="strip-wrap">
+            <button class="icon step" data-action="prev-mode" aria-label="Previous mode" title="Previous mode (←)">‹</button>
+            <div id="modes" class="modes" role="group" aria-label="Mode" aria-describedby="modeHint"></div>
+            <button class="icon step" data-action="next-mode" aria-label="Next mode" title="Next mode (→)">›</button>
+          </div>
+          <button id="recBtn" class="rec" data-action="record" title="Record a clip (C)">
+            <span class="ico rec"></span><span class="lbl">Record</span>
+          </button>
+          <button class="sheet-btn" id="sheetBtn" aria-controls="panel" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+            <span>Tweak</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+        <div class="intro-card" tabindex="-1">
+          <svg class="veins" viewBox="0 0 200 120" aria-hidden="true">
+            <path d="M200 8C160 12 150 40 118 44S70 30 52 58 22 92 0 118M118 44c10 22 4 40 24 58M52 58c-14-8-30-6-44-18M150 26c14 6 30 2 50 10"/>
+          </svg>
+          <p class="kicker">Audio-reactive visualizer</p>
+          <h2 id="introTitle">Your picture,<br>alive to the beat.</h2>
+          <p>Load a photo or video and play some music. Beatwarp tunnels, melts, shatters and breathes it in time with the sound. Then record a clip.</p>
+          <div class="intro-actions">
+            <button class="primary" data-action="upload-image">Choose a picture</button>
+            <button data-action="start-demo">Try the demo</button>
+          </div>
+          <p class="fine">Or drop or paste an image anywhere. Everything runs in your browser and nothing is uploaded. Contains flashing visuals; turn on <em>Reduce flashing</em> under Tweak if you need to.</p>
+        </div>
+      </div>
+      <div id="drop" hidden>
+        <svg viewBox="0 0 200 200" aria-hidden="true"><path d="M100 14c38 0 70 18 80 52s-6 74-38 96-80 26-108-6S6 76 30 46 62 14 100 14z"/></svg>
+        <div>Drop a picture or a song</div>
+      </div>
     </section>
 
-    <aside id="panel">
+    <aside id="panel" aria-label="Controls">
       <header>
-        <strong>Beatwarp</strong>
-        <button id="hidePanel" class="icon" title="Hide controls (H)" aria-label="Hide controls">›</button>
+        <span class="grabber" aria-hidden="true"></span>
+        <h2 class="panel-title">Tweak</h2>
+        <button id="hidePanel" class="icon" title="Close controls (H)" aria-label="Close controls">×</button>
       </header>
 
-      <div class="group">
-        <h2>Picture</h2>
-        <div class="row">
-          <button data-action="upload-image" class="primary">Upload image / video</button>
-          <button data-action="camera">Camera</button>
+      <section class="group" aria-labelledby="h-source">
+        <h3 id="h-source">Source</h3>
+        <div class="row" role="group" aria-label="Picture">
+          <button data-action="upload-image">Upload image / video</button>
         </div>
         <div class="row">
-          <button data-action="sample">Sample</button>
-          <button data-action="snapshot">Save PNG</button>
+          <button data-action="camera" aria-pressed="false">Camera</button>
+          <button data-action="sample">Sample picture</button>
         </div>
-      </div>
+        <div class="row seg" id="audioSrc" role="group" aria-label="Music source">
+          <button data-src="demo" aria-pressed="false">Demo beat</button>
+          <button data-src="file" aria-pressed="false">Song file</button>
+          <button data-src="mic" aria-pressed="false">Mic</button>
+        </div>
+        <div class="param">
+          <label for="volume">Volume</label>
+          <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8" aria-valuetext="80%">
+          <output for="volume" id="volOut" aria-hidden="true">80%</output>
+        </div>
+        <div class="status" id="audioStatus">No music yet — pick a source above</div>
+        <p class="fine phone-only">Song not in Files? Tap Mic and play it out loud.</p>
+      </section>
 
-      <div class="group">
-        <h2>Music</h2>
-        <div class="row seg" id="audioSrc">
-          <button data-src="demo">Demo beat</button>
-          <button data-src="file">Audio file</button>
-          <button data-src="mic">Mic</button>
+      <section class="group" aria-labelledby="h-looks">
+        <div class="group-head">
+          <h3 id="h-looks">Looks</h3>
+          <div class="head-actions">
+            <button class="mini" data-action="undo" id="undoBtn" disabled title="Undo (Z)">Undo</button>
+            <button class="mini mutate" data-action="random" title="Mutate everything (R)"><span aria-hidden="true">⟳</span> Mutate</button>
+          </div>
         </div>
-        <div class="row">
-          <button id="playBtn" data-action="play"><span class="ico play"></span><span class="lbl">Play</span></button>
-          <label class="inline">Vol <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8"></label>
-        </div>
-        <div class="status" id="audioStatus">No audio yet</div>
-      </div>
+        <div id="presets" class="presets" role="group" aria-label="Presets"></div>
+      </section>
 
-      <div class="group">
-        <h2>Mode</h2>
-        <div id="modes" class="modes"></div>
-        <div class="hint" id="modeHint"></div>
-      </div>
+      <section class="group" aria-labelledby="h-pal">
+        <h3 id="h-pal">Palette</h3>
+        <div id="palettes" class="palettes" role="group" aria-labelledby="h-pal"></div>
+      </section>
 
-      <div class="group">
-        <h2>Presets</h2>
-        <div class="row">
-          <select id="presets" aria-label="Presets"></select>
-          <button data-action="random" title="Randomize (R)">Randomize</button>
-        </div>
-      </div>
+      <section class="group" aria-labelledby="h-feel">
+        <h3 id="h-feel">Feel</h3>
+        <div id="feel"></div>
+      </section>
 
-      <div class="group">
-        <h2>Palette</h2>
-        <div id="palettes" class="palettes"></div>
-      </div>
+      <details class="group fold">
+        <summary><h3>Fine tune</h3></summary>
+        <div id="fine"></div>
+      </details>
 
-      <div id="params"></div>
-
-      <div class="group">
-        <h2>Output</h2>
-        <div class="row">
-          <label class="inline">Aspect
-            <select id="aspect">
-              <option value="fill">Fill</option>
-              <option value="9:16">9:16 Reel</option>
-              <option value="1:1">1:1</option>
-              <option value="4:5">4:5</option>
-              <option value="16:9">16:9</option>
-            </select>
-          </label>
+      <details class="group fold">
+        <summary><h3>Output</h3></summary>
+        <div class="param">
+          <label for="aspect">Aspect</label>
+          <select id="aspect">
+            <option value="fill">Fill screen</option>
+            <option value="9:16">9:16 vertical</option>
+            <option value="1:1">1:1 square</option>
+            <option value="4:5">4:5 portrait</option>
+            <option value="16:9">16:9 wide</option>
+          </select>
         </div>
+        <label class="switch"><input type="checkbox" id="calm"><span>Reduce flashing</span></label>
+        <label class="switch"><input type="checkbox" id="keysOn" checked><span>Single-key shortcuts</span></label>
         <div class="row">
-          <button id="recBtn" data-action="record" class="rec"><span class="ico rec"></span><span class="lbl">Record clip</span></button>
-          <button data-action="fullscreen" title="Fullscreen (F)">Fullscreen</button>
+          <button data-action="reset">Reset sliders</button>
+          <button data-action="help">Shortcuts</button>
         </div>
-        <div class="row">
-          <button data-action="reset">Reset controls</button>
-        </div>
-        <p class="fine keys-hint">Keyboard: space plays and pauses, the arrow keys change mode, R randomizes, H hides this panel and F goes fullscreen.</p>
-      </div>
+      </details>
     </aside>
-    <button id="showPanel" class="icon" hidden title="Show controls (H)" aria-label="Show controls">‹</button>
   </main>
+
+  <dialog id="keys" aria-labelledby="keysTitle">
+    <h2 id="keysTitle">Shortcuts</h2>
+    <dl>
+      <dt><kbd>Space</kbd></dt><dd>Play / pause</dd>
+      <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Previous / next mode</dd>
+      <dt><kbd>1</kbd>–<kbd>0</kbd></dt><dd>Modes 1–10 (add <kbd>Shift</kbd> for 11–20)</dd>
+      <dt><kbd>[</kbd> <kbd>]</kbd></dt><dd>Previous / next palette</dd>
+      <dt><kbd>R</kbd></dt><dd>Mutate everything</dd>
+      <dt><kbd>Z</kbd></dt><dd>Undo the last look change</dd>
+      <dt><kbd>C</kbd></dt><dd>Start / stop recording</dd>
+      <dt><kbd>H</kbd></dt><dd>Show / hide controls</dd>
+      <dt><kbd>F</kbd></dt><dd>Fullscreen</dd>
+    </dl>
+    <p class="fine">On a phone, swipe sideways on the picture to change mode.</p>
+    <form method="dialog"><button class="primary">Got it</button></form>
+  </dialog>
+
+  <dialog id="clip" aria-labelledby="clipTitle">
+    <h2 id="clipTitle">Clip ready</h2>
+    <video id="clipVideo" playsinline loop muted autoplay controls aria-label="Recorded clip preview"></video>
+    <div class="row">
+      <button class="primary" id="clipShare" hidden>Share</button>
+      <button id="clipSave">Save</button>
+      <button id="clipClose">Discard</button>
+    </div>
+    <p class="fine" id="clipHint" hidden>To put it in Photos, tap Share, then Save Video.</p>
+  </dialog>
 
   <input type="file" id="imageInput" accept="image/*,video/*" hidden>
   <input type="file" id="audioInput" accept="audio/*,video/*" hidden>
-  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="toast"></div>
+  <div class="sr-only" id="srStatus" role="status" aria-live="polite"></div>
+  <div class="sr-only" id="srAlert" role="alert"></div>
 
   <script type="module" src="js/main.js"></script>
 </body>

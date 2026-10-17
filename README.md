@@ -25,14 +25,18 @@ Live: https://sankshitpandoh.github.io/beatwarp/
 
 - **Picture:** upload or drop an image or a video, paste one from the clipboard, or use the live camera. A 5-colour palette is pulled from your image with k-means.
 - **Music:** a built-in demo beat, any audio file, or the microphone. The analyser splits the sound into sub, bass, mids and highs and detects kicks with spectral flux. Every mode responds to all of them.
-- **20 modes:** none, smear (liquid feedback), droste, infinite (tunnel), corridor, cube, planet, windows, melt, shatter, prism, terrain (a flyover of a landscape grown from your picture), breathe, mosh, sort, scanline, thresh, solar, halftone and vhs. A kick changes the structure in each mode: the tunnel pulses, the shards explode, the tracking slams, and so on.
-- **Space controls:** symmetry (bilateral, quad, radial up to 12), spin, tiles, twist, slice, chaos, and a lens with 7 styles: glass ribs, glass fan, anamorphic, melt, glitch, pixels, fly eye.
-- **Light controls:** trails (feedback), heat (bloom and kick flashes), brightness, vignette, hue drift. **Response controls:** react, decay, input gain.
+- **20 modes:** Original, Liquid, Spiral, Tunnel, Corridor, Cube, Planet, Screens, Melt, Shatter, Prism, Terrain (a flyover of a landscape grown from your picture), Breathe, Glitch, Streak, Scanline, Poster, Invert, Halftone and VHS. A kick changes the structure in each mode: the tunnel pulses, the shards explode, the tracking slams, and so on. On a phone, swipe sideways on the picture to change mode.
+- **Feel:** beat response, wobble, trails, glow and speed, up front. **Fine tune:** symmetry (bilateral, quad, radial up to 12), spin, tiles, twist, slices, and a lens with 7 styles (glass ribs, glass fan, anamorphic, melt, glitch, pixels, fly eye); brightness, vignette, colour cycle and effect mix; settle time and sensitivity.
 - **Palettes:** the Photo palette plus 11 presets. The picture keeps its own colours. The palette only colours the world around it, such as kick accents, frames and the terrain sky.
-- **Looks:** 16 presets and a 🎲 randomiser.
-- **Output:** pick an aspect ratio (Fill, 9:16 Reel, 1:1, 4:5, 16:9), record a clip with the audio included (MP4 where the browser supports it, otherwise WebM), save a PNG, or go fullscreen.
+- **Looks:** 16 presets, Mutate (randomise everything) and Undo.
+- **Output:** record a clip with the audio included (MP4 where the browser supports it, otherwise WebM), then share or save it from the preview. Phones record 9:16 by default; other aspects are Fill, 1:1, 4:5 and 16:9. Save a PNG or go fullscreen.
+- **Comfort:** a Reduce flashing switch (on by default with reduced motion), and single-key shortcuts can be turned off.
 
-Keys: `Space` play/pause · `←/→` change mode · `R` random · `H` hide panel · `F` fullscreen.
+Keys: `Space` play/pause · `←/→` change mode · `1`–`0` modes 1–10 (`Shift` for 11–20) · `[ ]` palette · `R` mutate · `Z` undo · `C` record · `H` controls · `F` fullscreen · `?` all shortcuts.
+
+## Design
+
+The interface is "wetware": a living organism wired into a night-city machine. The picture is the specimen and gets all the colour; the UI is dark glass grown around it, with chartreuse and teal as the living colours and magenta as a rare signal. Organic, slowly morphing shapes mark what is on, HUD notches mark containers, and only small elements pulse with the beat. Type is Syne (display), Chakra Petch (UI) and Martian Mono (readouts).
 
 ## Code map
 

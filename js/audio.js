@@ -81,6 +81,7 @@ export class AudioEngine {
     this.micStream = stream;
     this.node = this.ctx.createMediaStreamSource(stream);
     this.node.connect(this.input); // not to speakers: avoids feedback
+    this.node.connect(this.recDest); // but recorded clips keep the sound
     this.kind = 'mic';
   }
 

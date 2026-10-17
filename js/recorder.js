@@ -26,6 +26,7 @@ export class Recorder {
     this.started = performance.now();
   }
 
+  /** Resolves with the finished clip as { blob, name }. */
   stop() {
     return new Promise(resolve => {
       const rec = this.rec;
@@ -33,8 +34,7 @@ export class Recorder {
       rec.onstop = () => {
         const blob = new Blob(this.chunks, { type: this.mime });
         const ext = this.mime.includes('mp4') ? 'mp4' : 'webm';
-        download(blob, `beatwarp-${stamp()}.${ext}`);
-        resolve();
+        resolve({ blob, name: `beatwarp-${stamp()}.${ext}` });
       };
       rec.stop();
     });
