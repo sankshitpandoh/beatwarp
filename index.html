@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Beatwarp — Music Warps Your Image</title>
   <meta name="description" content="Upload any image and watch it warp, melt, tunnel and shatter to music. Runs entirely in your browser.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow+Semi+Condensed:wght@500;600&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,17 +22,17 @@
         <span data-band="kick"><i></i>kick</span>
       </div>
       <div id="modeName"></div>
-      <div id="recBadge" hidden>● REC <span id="recTime">0:00</span></div>
+      <div id="recBadge" hidden>Recording <span id="recTime">0:00</span></div>
 
       <div id="intro">
         <div class="intro-card">
           <h1>Beatwarp</h1>
-          <p>Drop any image. Play any music. Watch the picture tunnel, melt, shatter and breathe to the beat.</p>
+          <p>Load any picture and play some music. The picture tunnels, melts, shatters and breathes in time with it.</p>
           <div class="intro-actions">
             <button class="primary" data-action="upload-image">Upload an image</button>
             <button data-action="start-demo">Try with demo beat</button>
           </div>
-          <p class="fine">Everything runs locally in your browser — nothing is uploaded.</p>
+          <p class="fine">It all runs in your browser. Nothing is uploaded.</p>
         </div>
       </div>
       <div id="drop" hidden><div>Drop image, video or audio</div></div>
@@ -38,7 +41,7 @@
     <aside id="panel">
       <header>
         <strong>Beatwarp</strong>
-        <button id="hidePanel" class="icon" title="Hide controls (H)" aria-label="Hide controls">⟩</button>
+        <button id="hidePanel" class="icon" title="Hide controls (H)" aria-label="Hide controls">›</button>
       </header>
 
       <div class="group">
@@ -61,7 +64,7 @@
           <button data-src="mic">Mic</button>
         </div>
         <div class="row">
-          <button id="playBtn" data-action="play">▶ Play</button>
+          <button id="playBtn" data-action="play"><span class="ico play"></span><span class="lbl">Play</span></button>
           <label class="inline">Vol <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8"></label>
         </div>
         <div class="status" id="audioStatus">No audio yet</div>
@@ -77,7 +80,7 @@
         <h2>Presets</h2>
         <div class="row">
           <select id="presets" aria-label="Presets"></select>
-          <button data-action="random" title="Randomize (R)">🎲 Random</button>
+          <button data-action="random" title="Randomize (R)">Randomize</button>
         </div>
       </div>
 
@@ -102,16 +105,16 @@
           </label>
         </div>
         <div class="row">
-          <button id="recBtn" data-action="record" class="rec">● Record clip</button>
-          <button data-action="fullscreen" title="Fullscreen (F)">⛶ Fullscreen</button>
+          <button id="recBtn" data-action="record" class="rec"><span class="ico rec"></span><span class="lbl">Record clip</span></button>
+          <button data-action="fullscreen" title="Fullscreen (F)">Fullscreen</button>
         </div>
         <div class="row">
           <button data-action="reset">Reset controls</button>
         </div>
-        <p class="fine">Keys: Space play · ←/→ mode · R random · H hide · F fullscreen</p>
+        <p class="fine">Keyboard: space plays and pauses, the arrow keys change mode, R randomizes, H hides this panel and F goes fullscreen.</p>
       </div>
     </aside>
-    <button id="showPanel" class="icon" hidden title="Show controls (H)" aria-label="Show controls">⟨</button>
+    <button id="showPanel" class="icon" hidden title="Show controls (H)" aria-label="Show controls">‹</button>
   </main>
 
   <input type="file" id="imageInput" accept="image/*,video/*" hidden>

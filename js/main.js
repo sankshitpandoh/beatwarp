@@ -104,7 +104,8 @@ async function useCamera() {
 // ---------- audio -------------------------------------------------------------
 function refreshAudioUi() {
   $$('#audioSrc button').forEach(b => b.classList.toggle('on', b.dataset.src === audio.kind));
-  $('#playBtn').textContent = audio.playing ? '❚❚ Pause' : '▶ Play';
+  $('#playBtn .ico').className = `ico ${audio.playing ? 'pause' : 'play'}`;
+  $('#playBtn .lbl').textContent = audio.playing ? 'Pause' : 'Play';
   $('#playBtn').disabled = audio.kind === 'mic' || audio.kind === 'none';
   $('#audioStatus').textContent = {
     none: 'No audio yet — pick a source',
@@ -297,7 +298,8 @@ async function toggleRecord() {
   if (recorder.active) {
     await recorder.stop();
     b.classList.remove('on');
-    b.textContent = '● Record clip';
+    b.querySelector('.ico').className = 'ico rec';
+    b.querySelector('.lbl').textContent = 'Record clip';
     $('#recBadge').hidden = true;
     toast('Clip saved to your downloads');
     layout();
@@ -312,7 +314,8 @@ async function toggleRecord() {
     return;
   }
   b.classList.add('on');
-  b.textContent = '■ Stop & save';
+  b.querySelector('.ico').className = 'ico stop';
+  b.querySelector('.lbl').textContent = 'Stop and save';
   $('#recBadge').hidden = false;
 }
 
