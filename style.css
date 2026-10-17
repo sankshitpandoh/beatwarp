@@ -215,8 +215,42 @@ input[type=range]::-moz-range-thumb {
 
 @media (max-width: 760px) {
   #app { flex-direction: column; }
-  #stage { flex: none; height: 56dvh; }
-  #panel { width: 100%; flex: 1; border-left: 0; border-top: 3px solid var(--edge); padding: 0 16px 24px; }
+  #stage { flex: none; height: 56vh; height: 56dvh; }
+  #panel {
+    width: 100%; flex: 1; border-left: 0; border-top: 3px solid var(--edge);
+    padding: 0 max(16px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    overscroll-behavior: contain;
+  }
   .modes { grid-template-columns: repeat(4, 1fr); }
-  #app.panel-hidden #stage { height: 100dvh; }
+  #app.panel-hidden #stage { height: 100vh; height: 100dvh; }
+  /* the panel sits below the screen here, so the hide key points down */
+  #hidePanel { rotate: 90deg; }
+  /* the intro covers the whole unit so it never gets clipped by the short screen */
+  #intro { position: fixed; z-index: 6; overflow-y: auto; }
+  .intro-card { margin: auto; }
+}
+
+@media (max-width: 380px) {
+  .intro-card { padding: 18px 18px 14px; }
+  .intro-card h1 { font-size: 36px; }
+  .intro-card p { font-size: 16px; }
+  .param { grid-template-columns: 70px 1fr 56px; gap: 6px; }
+  #meters span { width: 26px; }
+}
+
+/* landscape phones: keep clear of the notch and home bar, shrink the intro */
+@media (max-height: 500px) and (min-width: 761px) {
+  #panel { padding-bottom: calc(24px + env(safe-area-inset-bottom)); padding-right: max(16px, env(safe-area-inset-right)); }
+  #meters { left: max(12px, env(safe-area-inset-left)); }
+  .intro-card { padding: 16px 20px 14px; }
+  .intro-card h1 { font-size: 34px; }
+}
+
+/* touch screens: bigger keys, no double-tap zoom, no iOS zoom on focus */
+@media (pointer: coarse) {
+  button, select { min-height: 42px; touch-action: manipulation; }
+  .modes button { min-height: 40px; }
+  select { font-size: 16px; }
+  input[type=range] { height: 36px; touch-action: pan-y; }
+  .keys-hint { display: none; }
 }
