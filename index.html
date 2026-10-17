@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Beatwarp — Music Warps Your Image</title>
+  <meta name="description" content="Upload any image and watch it warp, melt, tunnel and shatter to music. Runs entirely in your browser.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+    <section id="stage">
+      <canvas id="view" aria-label="Visualizer output"></canvas>
+      <div id="meters" aria-hidden="true">
+        <span data-band="sub"><i></i>sub</span>
+        <span data-band="bass"><i></i>bass</span>
+        <span data-band="mid"><i></i>mid</span>
+        <span data-band="high"><i></i>high</span>
+        <span data-band="kick"><i></i>kick</span>
+      </div>
+      <div id="modeName"></div>
+      <div id="recBadge" hidden>● REC <span id="recTime">0:00</span></div>
+
+      <div id="intro">
+        <div class="intro-card">
+          <h1>Beatwarp</h1>
+          <p>Drop any image. Play any music. Watch the picture tunnel, melt, shatter and breathe to the beat.</p>
+          <div class="intro-actions">
+            <button class="primary" data-action="upload-image">Upload an image</button>
+            <button data-action="start-demo">Try with demo beat</button>
+          </div>
+          <p class="fine">Everything runs locally in your browser — nothing is uploaded.</p>
+        </div>
+      </div>
+      <div id="drop" hidden><div>Drop image, video or audio</div></div>
+    </section>
+
+    <aside id="panel">
+      <header>
+        <strong>Beatwarp</strong>
+        <button id="hidePanel" class="icon" title="Hide controls (H)" aria-label="Hide controls">⟩</button>
+      </header>
+
+      <div class="group">
+        <h2>Picture</h2>
+        <div class="row">
+          <button data-action="upload-image" class="primary">Upload image / video</button>
+          <button data-action="camera">Camera</button>
+        </div>
+        <div class="row">
+          <button data-action="sample">Sample</button>
+          <button data-action="snapshot">Save PNG</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Music</h2>
+        <div class="row seg" id="audioSrc">
+          <button data-src="demo">Demo beat</button>
+          <button data-src="file">Audio file</button>
+          <button data-src="mic">Mic</button>
+        </div>
+        <div class="row">
+          <button id="playBtn" data-action="play">▶ Play</button>
+          <label class="inline">Vol <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8"></label>
+        </div>
+        <div class="status" id="audioStatus">No audio yet</div>
+      </div>
+
+      <div class="group">
+        <h2>Mode</h2>
+        <div id="modes" class="modes"></div>
+        <div class="hint" id="modeHint"></div>
+      </div>
+
+      <div class="group">
+        <h2>Presets</h2>
+        <div class="row">
+          <select id="presets" aria-label="Presets"></select>
+          <button data-action="random" title="Randomize (R)">🎲 Random</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Palette</h2>
+        <div id="palettes" class="palettes"></div>
+      </div>
+
+      <div id="params"></div>
+
+      <div class="group">
+        <h2>Output</h2>
+        <div class="row">
+          <label class="inline">Aspect
+            <select id="aspect">
+              <option value="fill">Fill</option>
+              <option value="9:16">9:16 Reel</option>
+              <option value="1:1">1:1</option>
+              <option value="4:5">4:5</option>
+              <option value="16:9">16:9</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <button id="recBtn" data-action="record" class="rec">● Record clip</button>
+          <button data-action="fullscreen" title="Fullscreen (F)">⛶ Fullscreen</button>
+        </div>
+        <div class="row">
+          <button data-action="reset">Reset controls</button>
+        </div>
+        <p class="fine">Keys: Space play · ←/→ mode · R random · H hide · F fullscreen</p>
+      </div>
+    </aside>
+    <button id="showPanel" class="icon" hidden title="Show controls (H)" aria-label="Show controls">⟨</button>
+  </main>
+
+  <input type="file" id="imageInput" accept="image/*,video/*" hidden>
+  <input type="file" id="audioInput" accept="audio/*,video/*" hidden>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
